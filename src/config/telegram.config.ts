@@ -1,7 +1,7 @@
 import { ConfigService } from '@nestjs/config';
 import { ITelegramOptions } from 'src/services/telegram/types/telegram.interface';
 
-export const getTelegramConfig = (
+export const telegramConfigFactory = (
   configService: ConfigService,
 ): ITelegramOptions => {
   const botToken = configService.get('TELEGRAM_BOT_TOKEN');

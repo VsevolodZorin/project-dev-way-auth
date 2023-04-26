@@ -1,8 +1,10 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { getTelegramConfig } from './config/telegram.config';
+import { typeOrmConfigFactory } from './config/orm.config';
+import { telegramConfigFactory } from './config/telegram.config';
 import { TelegramModule } from './services/telegram/telegram.module';
 import { UserModule } from './user/user.module';
 
@@ -12,7 +14,12 @@ import { UserModule } from './user/user.module';
     TelegramModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
-      useFactory: getTelegramConfig,
+      useFactory: telegramConfigFactory,
+    }),
+    TypeOrmModule.forRootAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: typeOrmConfigFactory,
     }),
     UserModule,
   ],
