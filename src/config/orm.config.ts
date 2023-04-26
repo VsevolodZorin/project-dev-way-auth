@@ -11,7 +11,7 @@ export const typeOrmConfigFactory = async (
     username: configService.get('DB_USERNAME'),
     database: configService.get('DB_NAME'),
     password: configService.get('DB_PASSWORD'),
-    entities: [__dirname + '/../**/*.entity.{js,ts}'],
+    entities: ['dist/**/*.entity.js'],
     migrations: [__dirname + '/../src/database/migrations/*{.ts,.js}'],
     extra: {
       charset: 'utf8mb4_unicode_ci',
