@@ -12,6 +12,8 @@ export class UserService {
     private userRepository: Repository<UserEntity>,
   ) {}
   async create(createUserDto: CreateUserDto): Promise<UserEntity> {
+    // todo: hash password
+
     const user = await this.findByEmail(createUserDto.email);
     if (user) {
       throw new UnprocessableEntityException('Email already exists');

@@ -27,7 +27,11 @@
     "logs": "firebase functions:log",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
-    "typecheck": "tsc --project tsconfig.json --noEmit"
+    "typecheck": "tsc --project tsconfig.json --noEmit",
+    "typeorm": "npm run build && npx typeorm -d dist/config/orm-migration.config.js",
+    "typeorm:migration:generate": "npm run typeorm -- migration:generate",
+    "typeorm:migration:run": "npm run typeorm -- migration:run",
+    "typeorm:migration:revert": "npm run typeorm -- migration:revert"
   },
   "dependencies": {
     "@nestjs/common": "^9.0.0",
@@ -37,6 +41,7 @@
     "@nestjs/platform-express": "^9.0.0",
     "@nestjs/swagger": "^6.3.0",
     "@nestjs/typeorm": "^9.0.1",
+    "dotenv": "^16.0.3",
     "firebase-admin": "^11.7.0",
     "firebase-functions": "^4.3.1",
     "pg": "^8.10.0",
