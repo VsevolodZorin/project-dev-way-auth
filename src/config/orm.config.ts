@@ -16,7 +16,7 @@ export const typeOrmConfigFactory = async (
     extra: {
       charset: 'utf8mb4_unicode_ci',
     },
-    synchronize: true,
+    synchronize: false,
     logging: true,
   };
 };
