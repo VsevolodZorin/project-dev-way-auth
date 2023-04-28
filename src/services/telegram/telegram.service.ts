@@ -45,7 +45,7 @@ export class TelegramService {
       }
       await this.bot.telegram.sendMessage(chatId, result);
     } catch (e) {
-      console.log('--- telegram sendMessage catch', e.message);
+      console.log('--- telegram sendObject catch', e.message);
     }
   }
 }

@@ -7,6 +7,8 @@ import { typeOrmConfigFactory } from './config/orm.config';
 import { telegramConfigFactory } from './config/telegram.config';
 import { TelegramModule } from './services/telegram/telegram.module';
 import { UserModule } from './user/user.module';
+import { AuthModule } from './auth/auth.module';
+import { SessionModule } from './session/sessoin.module';
 
 @Module({
   imports: [
@@ -22,6 +24,8 @@ import { UserModule } from './user/user.module';
       useFactory: typeOrmConfigFactory,
     }),
     UserModule,
+    AuthModule,
+    SessionModule,
   ],
   controllers: [AppController],
   providers: [AppService],

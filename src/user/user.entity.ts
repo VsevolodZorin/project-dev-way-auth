@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { hash } from 'bcrypt';
+import * as bcrypt from 'bcrypt';
 import {
   BeforeInsert,
   Column,
@@ -24,7 +24,7 @@ export class UserEntity {
     default: 'testUser',
   })
   @Column()
-  name: string;
+  username: string;
 
   @ApiProperty({
     description: 'local email',
@@ -59,6 +59,7 @@ export class UserEntity {
 
   @BeforeInsert()
   async hashPassword() {
-    this.password = await hash(this.password, 10);
+    const salt = await bcrypt.genSalt();
+    this.password = await bcrypt.hash(this.password, salt);
   }
 }
