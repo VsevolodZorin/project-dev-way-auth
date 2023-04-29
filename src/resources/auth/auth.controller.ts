@@ -1,18 +1,8 @@
-import {
-  Body,
-  Controller,
-  Post,
-  Res,
-  UnauthorizedException,
-  UseGuards,
-} from '@nestjs/common';
-import { Response } from 'express';
-
+import { Body, Controller, Post, UseGuards } from '@nestjs/common';
 import { ApiBody, ApiCookieAuth, ApiTags } from '@nestjs/swagger';
 import { AuthService } from './auth.service';
-import { JwtRefreshToken } from './decorators/jwt-token.decorator';
 import { LoginUserLocalDto } from './dto/login-user-local.dto';
-import { JwtRefreshGuard } from './guards/jwt-refresh.guard';
+import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { LocalAuthGuard } from './guards/local.guard';
 import { User } from 'src/resources/user/decorators/user.decorator';
 import { CreateUserDto } from 'src/resources/user/dto/create-user.dto';
@@ -23,41 +13,30 @@ import { CreateUserDto } from 'src/resources/user/dto/create-user.dto';
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
-  @UseGuards(LocalAuthGuard)
   @Post('login')
   @ApiBody({ type: LoginUserLocalDto })
-  async login(@User('id') id) {
-    const tokenPair = await this.authService.generateTokenPair(id);
+  @UseGuards(LocalAuthGuard)
+  async login(@Body() loginUserDto: LoginUserLocalDto) {
+    const tokenPair = await this.authService.login(loginUserDto);
     return tokenPair;
   }
 
   @Post('/registration')
-  async registration(
-    @Res() response: Response,
-    @Body() createUserDto: CreateUserDto,
-  ) {
-    const tokenPair = await this.authService.registration(createUserDto);
-    // await this.telegramService.sendObject({
-    //   message: 'registration local',
-    //   ...createUserDto,
-    // });
-    return response.json({ accessToken: tokenPair.accessToken });
+  @ApiBody({ type: CreateUserDto })
+  async registration(@Body() createUserDto: CreateUserDto) {
+    return this.authService.registration(createUserDto);
   }
 
+  // todo
   @Post('refresh')
-  @UseGuards(JwtRefreshGuard)
-  async refresh(@Res() res, @JwtRefreshToken() oldRefreshToken) {
-    // todo check correct execution
-    if (!oldRefreshToken) {
-      throw new UnauthorizedException();
-    }
+  @UseGuards(JwtAuthGuard)
+  async refresh(@User('id') userId) {
+    return 'refresh';
+  }
 
-    const { accessToken, refreshToken } = await this.authService.refreshToken(
-      oldRefreshToken,
-    );
-
-    res.cookie('refreshToken', refreshToken, { httpOnly: true });
-
-    return res.send({ accessToken });
+  @Post('/logout')
+  @UseGuards(JwtAuthGuard)
+  async logout(@User('id') userId: number) {
+    return this.authService.logout(userId);
   }
 }
