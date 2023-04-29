@@ -2,12 +2,13 @@ import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
-import { SessionService } from 'src/session/session.service';
-import { CreateUserDto } from 'src/user/dto/create-user.dto';
-import { UserEntity } from 'src/user/user.entity';
-import { UserService } from 'src/user/user.service';
+
 import { IJwtPayload } from './types/jwt-payload.interface';
 import { IJwtTokenPair } from './types/jwt-token-pair.interface';
+import { UserService } from '../user/user.service';
+import { SessionService } from '../session/session.service';
+import { UserEntity } from '../user/user.entity';
+import { CreateUserDto } from '../user/dto/create-user.dto';
 
 @Injectable()
 export class AuthService {
@@ -33,13 +34,22 @@ export class AuthService {
   }
 
   // todo check response
-  async register(dto: CreateUserDto) {
-    const userData = await this.usersService.create(dto);
+  async registration(dto: CreateUserDto): Promise<IJwtTokenPair> {
+    const user = await this.usersService.create(dto);
+    // todo
+    // const activationLink = uuid(); // v34fa-asfasf-142saf-sa-asf
+    // const apiUrl = this.configService.get('API_URL');
+    // todo activation link on client
+    // const link = `${apiUrl}/auth/activate/${activationLink}`;
+    // await this.mailService.sendActivationMail(dto.email, link);
 
-    // return {
-    //   token: this.jwtService.sign({ id: userData.id }),
-    // };
-    return userData;
+    // await this.emailActivationService.create({
+    //   email: user.email,
+    //   activationLink,
+    // });
+    const tokenPair = await this.generateTokenPair(user.id);
+
+    return tokenPair;
   }
 
   async generateAccessToken(id: number): Promise<string> {
