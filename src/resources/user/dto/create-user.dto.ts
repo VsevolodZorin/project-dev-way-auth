@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsEmail, IsNotEmpty, Length, Matches } from 'class-validator';
-import { BackendMessage } from 'src/shared/backend.messages';
+import { backendMessage } from 'src/shared/backend.messages';
 import { regex } from 'src/utils/regex';
 
 export class CreateUserDto {
@@ -10,7 +10,7 @@ export class CreateUserDto {
     default: 'testUser',
   })
   @IsNotEmpty()
-  name: string;
+  username: string;
 
   @ApiProperty({
     description: 'The email address of the User',
@@ -29,7 +29,7 @@ export class CreateUserDto {
   @IsNotEmpty()
   @Length(8, 24)
   @Matches(regex.PASSWORD_RULE, {
-    message: BackendMessage.validation.PASSWORD_RULE_MESSAGE,
+    message: backendMessage.validation.PASSWORD_RULE_MESSAGE,
   })
   password: string;
 }

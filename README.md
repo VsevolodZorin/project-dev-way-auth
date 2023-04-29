@@ -1,1 +1,1 @@
-npm run typeorm:migration:generate -- src/database/migrations/migrationName
+npm run db:migration:generate -- src/database/migrations/migrationName

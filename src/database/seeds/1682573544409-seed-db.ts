@@ -6,11 +6,11 @@ export class SeedDB1682573544409 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(
       // password is Password@123
-      `INSERT INTO users (name, email, password, role, "isActivated") VALUES ('Vsevolod', 'vsevolod.dev@gmail.com', '$2b$10$omA1eAaEZFKEaAkDCQ2DU.QUIe2JTcfynMs6Ayhxj3NclXlNpodIS', 'admin', true)`,
+      `INSERT INTO users (username, email, password, role, "isActivated") VALUES ('Vsevolod', 'vsevolod.dev@gmail.com', '$2b$10$omA1eAaEZFKEaAkDCQ2DU.QUIe2JTcfynMs6Ayhxj3NclXlNpodIS', 'admin', true)`,
     );
     await queryRunner.query(
       // password is Password@123
-      `INSERT INTO users (name, email, password, role, "isActivated") VALUES ('user', 'user@gmail.com', '$2b$10$omA1eAaEZFKEaAkDCQ2DU.QUIe2JTcfynMs6Ayhxj3NclXlNpodIS', 'user', false)`,
+      `INSERT INTO users (username, email, password, role, "isActivated") VALUES ('user', 'user@gmail.com', '$2b$10$omA1eAaEZFKEaAkDCQ2DU.QUIe2JTcfynMs6Ayhxj3NclXlNpodIS', 'user', false)`,
     );
   }
 
