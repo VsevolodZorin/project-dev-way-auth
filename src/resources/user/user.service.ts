@@ -68,12 +68,19 @@ export class UserService {
 
   async update(id: number, updateUserDto: UpdateUserDto): Promise<UserEntity> {
     const user = await this.findById(id);
+    if (!user) {
+      throw new UnprocessableEntityException('User not found');
+    }
     Object.assign(user, updateUserDto);
     return this.userRepository.save(user);
   }
 
   async delete(id: number): Promise<UserEntity> {
     const user = await this.findById(id);
+    if (!user) {
+      // todo check correct error
+      throw new UnprocessableEntityException('User not found');
+    }
     return this.userRepository.remove(user);
   }
 }

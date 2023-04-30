@@ -7,6 +7,7 @@ import { CreateUserDto } from '../user/dto/create-user.dto';
 import { UserEntity } from '../user/user.entity';
 import { UserService } from '../user/user.service';
 import { LoginUserLocalDto } from './dto/login-user-local.dto';
+import { DeleteResult } from 'typeorm';
 
 @Injectable()
 export class AuthService {
@@ -58,7 +59,7 @@ export class AuthService {
     return this.jwtWrapperService.generateTokenPair(user);
   }
 
-  logout(userId: number) {
+  logout(userId: number): Promise<DeleteResult> {
     return this.jwtWrapperService.deleteSession(userId);
   }
 }

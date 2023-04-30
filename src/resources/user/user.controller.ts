@@ -15,6 +15,8 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UserService } from './user.service';
 import { UserEntity } from './user.entity';
+import { Role } from '../role/decorators/roles.decorator';
+import { RolesEnum } from '../role/types/role.enum';
 
 @ApiTags('user')
 @Controller('user')
@@ -28,11 +30,15 @@ export class UserController {
   }
 
   @Post()
+  @Role(RolesEnum.ADMIN)
+  @UseGuards(JwtAuthGuard)
   create(@Body() createUserDto: CreateUserDto) {
     return this.userService.create(createUserDto);
   }
 
   @Get()
+  @Role(RolesEnum.ADMIN)
+  @UseGuards(JwtAuthGuard)
   findAll() {
     return this.userService.findAll();
   }
@@ -43,11 +49,15 @@ export class UserController {
   // }
 
   @Patch(':id')
+  @Role(RolesEnum.ADMIN)
+  @UseGuards(JwtAuthGuard)
   update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
     return this.userService.update(+id, updateUserDto);
   }
 
   @Delete(':id')
+  @Role(RolesEnum.ADMIN)
+  @UseGuards(JwtAuthGuard)
   remove(@Param('id') id: string) {
     return this.userService.delete(+id);
   }
