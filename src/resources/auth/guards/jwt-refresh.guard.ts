@@ -8,7 +8,7 @@ import { Request } from 'express';
 import { JwtWrapperService } from 'src/services/jwt/jwt-wrapper.service';
 
 @Injectable()
-export class JwtAuthGuard implements CanActivate {
+export class JwtRefreshGuard implements CanActivate {
   constructor(private jwtWrapperService: JwtWrapperService) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
@@ -18,9 +18,10 @@ export class JwtAuthGuard implements CanActivate {
       throw new UnauthorizedException();
     }
     try {
-      const payload = await this.jwtWrapperService.validateAccessToken(token);
+      const payload = await this.jwtWrapperService.validateRefreshToken(token);
 
       request['user'] = payload;
+      request['jwtToken'] = token;
     } catch {
       throw new UnauthorizedException();
     }

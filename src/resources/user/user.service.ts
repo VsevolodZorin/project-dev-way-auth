@@ -24,6 +24,9 @@ export class UserService {
     return this.userRepository.save(newUser);
   }
 
+  /**
+   * @description Validate user by email and password. Return without password
+   */
   async validateLocalUser(
     email: string,
     password: string,
@@ -38,11 +41,24 @@ export class UserService {
     return null;
   }
 
+  /**
+   * @description Validate user by id. Return without password
+   */
+  async validateUserById(id: number): Promise<UserEntity> {
+    const user = await this.findById(id);
+
+    if (user) {
+      delete user.password;
+      return user;
+    }
+    return null;
+  }
+
   findAll(): Promise<UserEntity[]> {
     return this.userRepository.find(); // select * from user
   }
 
-  findById(id: number): Promise<UserEntity> {
+  private findById(id: number): Promise<UserEntity> {
     return this.userRepository.findOneBy({ id });
   }
 
