@@ -32,6 +32,9 @@ export class JwtWrapperService {
     return refreshToken;
   }
 
+  /**
+   * @description create or update session, if session already exists
+   */
   async generateTokenPair(user: UserEntity): Promise<IJwtTokenPair> {
     const payload: IJwtPayload = {
       id: user.id,

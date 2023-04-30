@@ -1,23 +1,22 @@
 import { Injectable, UnprocessableEntityException } from '@nestjs/common';
-import { UserService } from '../user/user.service';
-import { CreateUserDto } from '../user/dto/create-user.dto';
 import { JwtWrapperService } from 'src/services/jwt/jwt-wrapper.service';
 import { IJwtTokenPair } from 'src/services/jwt/types/jwt-tokenPair.interface';
-import { LoginUserLocalDto } from './dto/login-user-local.dto';
 import { backendMessage } from 'src/shared/backend.messages';
-import { IJwtPayload } from 'src/services/jwt/types/jwt-payload.interface';
+import { SessionService } from '../session/session.service';
+import { CreateUserDto } from '../user/dto/create-user.dto';
+import { UserEntity } from '../user/user.entity';
+import { UserService } from '../user/user.service';
+import { LoginUserLocalDto } from './dto/login-user-local.dto';
 
 @Injectable()
 export class AuthService {
   constructor(
     private userService: UserService,
     private jwtWrapperService: JwtWrapperService,
+    private sessionService: SessionService,
   ) {}
 
   async login(loginUserLocalDto: LoginUserLocalDto): Promise<IJwtTokenPair> {
-    // TODO
-    // this.mailService.sendActivationMail('vsevolod.dev@gmail.com');
-
     const user = await this.userService.validateLocalUser(
       loginUserLocalDto.email,
       loginUserLocalDto.password,
@@ -51,9 +50,12 @@ export class AuthService {
     return tokenPair;
   }
 
-  refresh() {
-    // todo
-    return 'refresh';
+  async refresh(user: UserEntity, token: string): Promise<IJwtTokenPair> {
+    const session = await this.sessionService.findByUserId(user.id);
+    if (!session || session.refreshToken !== token) {
+      throw new UnprocessableEntityException("don't use someone else's token");
+    }
+    return this.jwtWrapperService.generateTokenPair(user);
   }
 
   logout(userId: number) {
