@@ -15,7 +15,9 @@ import { UpdateRoleDto } from './dto/update-role.dto';
 import { RoleService } from './role.service';
 import { RolesEnum } from './types/role.enum';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('role')
 @Controller('role')
 export class RoleController {
   constructor(private readonly roleService: RoleService) {}

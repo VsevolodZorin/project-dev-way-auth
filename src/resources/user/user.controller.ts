@@ -43,10 +43,12 @@ export class UserController {
     return this.userService.findAll();
   }
 
-  // @Get(':id')
-  // findOne(@Param('id') id: string) {
-  //   return this.userService.findById(+id);
-  // }
+  @Get(':id')
+  @Role(RolesEnum.ADMIN)
+  @UseGuards(JwtAuthGuard)
+  findOne(@Param('id') id: string) {
+    return this.userService.validateUserById(+id);
+  }
 
   @Patch(':id')
   @Role(RolesEnum.ADMIN)

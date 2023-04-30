@@ -1,10 +1,10 @@
 import { Injectable, UnprocessableEntityException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import * as bcrypt from 'bcrypt';
 import { Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UserEntity } from './user.entity';
-import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UserService {
@@ -71,6 +71,7 @@ export class UserService {
     if (!user) {
       throw new UnprocessableEntityException('User not found');
     }
+    // todo user password
     Object.assign(user, updateUserDto);
     return this.userRepository.save(user);
   }
