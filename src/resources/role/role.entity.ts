@@ -6,8 +6,6 @@ export class RoleEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({
-    default: RolesEnum.USER,
-  })
+  @Column()
   name: string;
 }
