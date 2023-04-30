@@ -39,7 +39,7 @@ export class RoleService {
     return await this.roleRepository.findOneBy({ id });
   }
 
-  async findByName(name: RolesEnum): Promise<RoleEntity> {
+  async findByName(name: string): Promise<RoleEntity> {
     return await this.roleRepository.findOneBy({ name });
   }
 
