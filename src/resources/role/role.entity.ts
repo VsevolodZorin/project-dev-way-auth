@@ -7,9 +7,7 @@ export class RoleEntity {
   id: number;
 
   @Column({
-    type: 'enum',
-    enum: RolesEnum,
     default: RolesEnum.USER,
   })
-  name: RolesEnum;
+  name: string;
 }
