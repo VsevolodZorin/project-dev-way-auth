@@ -16,10 +16,25 @@ export class RoleService {
     private roleRepository: Repository<RoleEntity>,
   ) {}
 
+  async validateRoleById(id: number): Promise<RoleEntity> {
+    const role = await this.findById(id);
+    if (!role) {
+      throw new NotFoundException('Role not found');
+    }
+    return role;
+  }
+
+  async validateRoleByName(name: string): Promise<RoleEntity> {
+    const role = await this.findByName(name);
+    if (!role) {
+      throw new NotFoundException('Role not found');
+    }
+    return role;
+  }
+
   async create(createRoleDto: CreateRoleDto): Promise<RoleEntity> {
-    const role = await this.findByName(createRoleDto.name);
-    if (role) {
-      // todo check correct error
+    const role = await this.validateRoleByName(createRoleDto.name);
+    if (role.name === createRoleDto.name) {
       throw new UnprocessableEntityException(
         `Role with name ${createRoleDto.name} already exists`,
       );
@@ -33,29 +48,23 @@ export class RoleService {
     return await this.roleRepository.find();
   }
 
-  async findById(id: number): Promise<RoleEntity> {
+  private async findById(id: number): Promise<RoleEntity> {
     return await this.roleRepository.findOneBy({ id });
   }
 
-  async findByName(name: string): Promise<RoleEntity> {
+  private async findByName(name: string): Promise<RoleEntity> {
     return await this.roleRepository.findOneBy({ name });
   }
 
   async update(id: number, updateRoleDto: UpdateRoleDto): Promise<RoleEntity> {
-    const role = await this.findById(id);
-    if (!role) {
-      throw new NotFoundException('Role not found');
-    }
+    const role = await this.validateRoleById(id);
+
     Object.assign(role, updateRoleDto);
     return this.roleRepository.save(role);
   }
 
   async remove(id: number): Promise<RoleEntity> {
-    const role = await this.findById(id);
-    if (!role) {
-      // todo check correct error
-      throw new NotFoundException('Role not found');
-    }
+    const role = await this.validateRoleById(id);
     return this.roleRepository.remove(role);
   }
 }

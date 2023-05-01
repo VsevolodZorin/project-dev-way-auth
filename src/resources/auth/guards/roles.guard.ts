@@ -14,10 +14,8 @@ export class RolesGuard implements CanActivate {
   ): boolean | Promise<boolean> | Observable<boolean> {
     const request = context.switchToHttp().getRequest();
     const role = this.reflector.get<RolesEnum>('role', context.getHandler());
-    console.log('RolesGuard -> canActivate -> role:', role);
 
     const user = request.user as UserEntity;
-    console.log('RolesGuard -> canActivate -> user:', user);
     const hasRole = () => {
       return user.role.toString() === role.toString();
     };

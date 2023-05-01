@@ -40,7 +40,7 @@ export class RoleController {
   @Role(RolesEnum.ADMIN)
   @UseGuards(JwtAuthGuard)
   findById(@Param('id') id: string) {
-    return this.roleService.findById(Number(id));
+    return this.roleService.validateRoleById(Number(id));
   }
 
   @Patch(':id')

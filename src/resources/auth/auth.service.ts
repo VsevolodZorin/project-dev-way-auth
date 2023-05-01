@@ -25,12 +25,6 @@ export class AuthService {
       dto.password,
     );
 
-    if (!user) {
-      throw new UnprocessableEntityException(
-        backendMessage.UNPROCESSABLE_ENTITY,
-      );
-    }
-
     const tokenPair = await this.jwtWrapperService.generateTokenPair(user);
     await this.telegramService.sendObject({
       message: 'login local',

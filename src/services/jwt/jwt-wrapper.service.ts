@@ -76,7 +76,7 @@ export class JwtWrapperService {
   }
 
   deleteSession(userId: number): Promise<DeleteResult> {
-    return this.sessionService.delete(userId);
+    return this.sessionService.deleteByUserId(userId);
   }
 
   findToken(refreshToken: string): Promise<SessionEntity> {
