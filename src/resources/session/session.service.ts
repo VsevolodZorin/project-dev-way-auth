@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DeleteResult, Repository } from 'typeorm';
 import { CreateSessionDto } from './dto/create-session.dto';
@@ -37,7 +37,7 @@ export class SessionService {
     return this.sessionRepository.save(session);
   }
 
-  async delete(userId: number): Promise<DeleteResult> {
+  async deleteByUserId(userId: number): Promise<DeleteResult> {
     const session = await this.findByUserId(userId);
     return this.sessionRepository.delete(session);
   }

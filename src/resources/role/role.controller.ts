@@ -15,7 +15,9 @@ import { UpdateRoleDto } from './dto/update-role.dto';
 import { RoleService } from './role.service';
 import { RolesEnum } from './types/role.enum';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('role')
 @Controller('role')
 export class RoleController {
   constructor(private readonly roleService: RoleService) {}
@@ -38,7 +40,7 @@ export class RoleController {
   @Role(RolesEnum.ADMIN)
   @UseGuards(JwtAuthGuard)
   findById(@Param('id') id: string) {
-    return this.roleService.findById(Number(id));
+    return this.roleService.validateRoleById(Number(id));
   }
 
   @Patch(':id')
