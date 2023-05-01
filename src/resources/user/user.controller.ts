@@ -26,7 +26,7 @@ export class UserController {
   @Get('profile')
   @UseGuards(JwtAuthGuard)
   async profile(@User() user): Promise<UserEntity> {
-    return this.userService.validateUserById(user.id);
+    return this.userService.getProfile(user.id);
   }
 
   @Post()
