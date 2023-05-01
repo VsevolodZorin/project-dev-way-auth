@@ -65,6 +65,12 @@ export class UserService {
     return this.userRepository.save(newUser);
   }
 
+  async getProfile(id: number): Promise<UserEntity> {
+    const user = await this.validateUserById(id);
+    delete user.password;
+    return user;
+  }
+
   findAll(): Promise<UserEntity[]> {
     return this.userRepository.find(); // select * from user
   }
